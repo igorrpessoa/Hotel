@@ -11,13 +11,14 @@ The rules are:
 * A “DAY’ in the hotel room starts from 00:00 to 23:59:59.
 
 Contains the following options:
-- [CREATE](#CREATE) - Create a reservation!
-- [CHECK](#CHECK) - Consult a reservation through Reservation Code!
-- [CANCEL](#CANCEL) - Cancel a reservation!
-- [UPDATE](#UPDATE) - Update the period of your reservation!
-- [AVAILABILITY](#AVAILABILITY) - Check the availability of a period!
+- [CREATE](#create) - Create a reservation!
+- [CHECK](#check) - Consult a reservation through Reservation Code!
+- [CANCEL](#cancel) - Cancel a reservation!
+- [UPDATE](#update) - Update the period of your reservation!
+- [AVAILABILITY](#availability) - Check the availability of a period!
 
-#CREATE
+## CREATE
+
 You can book using the room through ```POST```: 
 ```localhost:8080/hotel/reservation```
 
@@ -32,20 +33,20 @@ In the body you will have to define a ```startDate``` and an ```endDate``` as th
 
 You will receive in the response a link with your reservation code.
 
-#CHECK
+## CHECK
 Check your reservation through a ```GET``` at the ```localhost:8080/hotel/reservation/{reservation_code}``` endpoint.
 
 You should set ```startDate``` and ```endDate``` in the body of your request, and the ```reservation_code``` in the endpoint .
 
-#CANCEL
+## CANCEL
 Cancel your reservation using the Reservation Code. You should use ```DELETE```
 to the reservation endpoint ```localhost:8080/hotel/reservation/{reservation_code}```,
 setting your reservation code in the endpoint.
 
-#UPDATE
+## UPDATE
 You can update the ```startDate``` and ```endDate``` using ```PUT```.
 You will change your stay in the Room.
 
-#AVAILABILITY
+## AVAILABILITY
 Last but not least you can use the ```localhost:8080/hotel/availability``` endpoint
 to check if the room is available in the period sent, using ```startDate``` and ```endDate``` in the body of your request

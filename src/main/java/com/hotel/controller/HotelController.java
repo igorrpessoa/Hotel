@@ -3,7 +3,6 @@ package com.hotel.controller;
 import com.hotel.dto.ReservationDTO;
 import com.hotel.exception.ReservationNotFoundException;
 import com.hotel.exception.ReservationValidationException;
-import com.hotel.model.Reservation;
 import com.hotel.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
