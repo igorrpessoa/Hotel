@@ -1,7 +1,5 @@
-package com.hotel;
+package com.hotel.exception;
 
-import com.hotel.exception.ReservationNotFoundException;
-import com.hotel.exception.ReservationValidationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

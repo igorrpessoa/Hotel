@@ -1,6 +1,6 @@
 package com.hotel.service;
 
-import com.hotel.HotelUtils;
+import com.hotel.util.HotelUtils;
 import com.hotel.exception.ReservationNotFoundException;
 import com.hotel.exception.ReservationValidationException;
 import com.hotel.dto.ReservationDTO;
@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -80,24 +78,30 @@ public class HotelService {
         }
     }
 
-    private void validateReservationDate(Timestamp startDate, Timestamp endDate) throws ParseException, ReservationValidationException {
+    /*    Validate the reservation regarding the rules of the HOTEL
+    *
+    * The Hotel contains only 1 room;
+    * Your stay can’t be longer than 3 days;
+    * The room can’t be reserved more than 30 days in advance;
+    * All reservations start at least the next day of booking;
+    * A “DAY’ in the hotel room starts from 00:00 to 23:59:59.
+    * */
+    private void validateReservationDate(Timestamp startDate, Timestamp endDate) throws ReservationValidationException {
 
         if(endDate.before(startDate)) {
             throw new ReservationValidationException("Start Date should be before then End Date");
         }
-        //Not possible to book a Room for more than 3 days
+
         if(!validateDaysToBook(startDate, endDate)) {
             throw new ReservationValidationException("Not possible to book a Room for more than 3 days");
         }
 
-        //Not possible to book a Room at max 30 days earlier
         if(!validateDayOfReservation(startDate)) {
-            throw new ReservationValidationException("Not possible to book a Room at max 30 days earlier");
+            throw new ReservationValidationException("You can only book a Room at max 30 days ahead");
         }
 
         List<Reservation> availableReservations =
                 reservationRepository.listReservedRooms(startDate, endDate);
-        //Not possible to book a Room on the days requested
         if(availableReservations.size() > 0) {
             throw new ReservationValidationException("The Room is not available for the requested period");
         }
@@ -106,12 +110,8 @@ public class HotelService {
     private Boolean validateDayOfReservation(Timestamp sd) {
         LocalDate startDate = sd.toLocalDateTime().toLocalDate();
         LocalDate today = LocalDate.now();
-        if(startDate.isAfter(today.plusDays(30))
-                && startDate.isAfter(today)){
-            return false;
-        } else {
-            return true;
-        }
+        return !startDate.isAfter(today.plusDays(30));
+
     }
 
     private Boolean validateDaysToBook(Timestamp d1, Timestamp d2) {
@@ -119,14 +119,11 @@ public class HotelService {
                 = TimeUnit
                 .MILLISECONDS
                 .toDays(d2.getTime() - d1.getTime());
-        if(difference_In_Days > 3) {
-            return false;
-        }
-        return true;
+        return difference_In_Days <= 3;
     }
 
 
-    public ReservationDTO findReservation(String reservationCode) throws ReservationNotFoundException, ParseException {
+    public ReservationDTO findReservation(String reservationCode) throws ReservationNotFoundException {
         Optional<Reservation> reservation = reservationRepository.findByReservationCode(reservationCode);
         if(reservation.isPresent()) {
             return reservationMapper.reservationToReservationDTO(reservation.get());
