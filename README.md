@@ -1,4 +1,4 @@
-# Welcome to th Hotel
+# Welcome to the Hotel
 
 ### Reference Documentation
 This application is created by Igor Rodrigues Pessoa
