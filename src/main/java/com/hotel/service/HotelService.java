@@ -1,6 +1,6 @@
 package com.hotel.service;
 
-import com.hotel.ReservationValidator;
+import com.hotel.validator.ReservationValidator;
 import com.hotel.util.HotelUtils;
 import com.hotel.exception.ReservationNotFoundException;
 import com.hotel.exception.ReservationValidationException;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Optional;
 

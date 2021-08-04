@@ -1,10 +1,8 @@
-package com.hotel;
+package com.hotel.validator;
 
 import com.hotel.exception.ReservationValidationException;
 import com.hotel.model.Reservation;
 import com.hotel.repository.ReservationRepository;
-import com.hotel.util.HotelUtils;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +31,8 @@ class ReservationValidatorTest {
 
     @Test
     public void givenStartDateBeforeEndDateWhenValidateThenThrowReservationValidationException() {
-        LocalDate startDate = HotelUtils.parseStringToLocalDate("2021-08-05");
-        LocalDate endDate = HotelUtils.parseStringToLocalDate("2021-08-04");
+        LocalDate startDate = LocalDate.now().plusDays(2);
+        LocalDate endDate = LocalDate.now().plusDays(1);
 
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
                 reservationValidator.validateReservationDate(startDate, endDate));
@@ -68,8 +65,8 @@ class ReservationValidatorTest {
 
     @Test
     public void given4DayReservationWhenValidateThenThrowReservationValidationException() {
-        LocalDate startDate = HotelUtils.parseStringToLocalDate("2021-08-01");
-        LocalDate endDate = HotelUtils.parseStringToLocalDate("2021-08-04");
+        LocalDate startDate = LocalDate.now().plusDays(1);
+        LocalDate endDate =  LocalDate.now().plusDays(5);
 
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
                 reservationValidator.validateReservationDate(startDate, endDate));
@@ -79,8 +76,8 @@ class ReservationValidatorTest {
 
     @Test
     public void givenDatesAlreadyBookedWhenValidateThenThrowReservationValidationException() {
-        LocalDate startDate = HotelUtils.parseStringToLocalDate("2021-08-02");
-        LocalDate endDate = HotelUtils.parseStringToLocalDate("2021-08-04");
+        LocalDate startDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = LocalDate.now().plusDays(2);
         List<Reservation> availableReservations = new ArrayList<>();
         availableReservations.add(new Reservation());
 

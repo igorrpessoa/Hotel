@@ -1,4 +1,4 @@
-package com.hotel;
+package com.hotel.validator;
 
 import com.hotel.exception.ReservationValidationException;
 import com.hotel.model.Reservation;
