@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.List;
 
 @Component
@@ -51,9 +50,12 @@ public class ReservationValidator {
         }
     }
 
+    //Currently using Montreal timezone considering the Hotel places there
     private Boolean validateDayOfReservation(LocalDate startDate) {
-        LocalDate today = LocalDate.now();
-        return !startDate.isAfter(today.plusDays(30));
+        Instant now = Instant.now();
+        ZonedDateTime montrealTime = now.atZone(ZoneId.of("America/Montreal"));
+
+        return !startDate.isAfter(montrealTime.toLocalDate().plusDays(30));
 
     }
 
