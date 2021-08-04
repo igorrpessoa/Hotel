@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.text.ParseException;
 
 @RestController
 @RequestMapping("/hotel")
@@ -23,13 +22,13 @@ public class HotelController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity getRoomAvailability(@RequestBody ReservationDTO reservation) throws ParseException, ReservationValidationException {
+    public ResponseEntity getRoomAvailability(@RequestBody ReservationDTO reservation) throws ReservationValidationException {
         hotelService.getRoomAvailability(reservation);
         return ResponseEntity.ok().body("The Room is available for the selected period");
     }
 
     @GetMapping(value = "/reservation/{reservationCode}")
-    public ResponseEntity getReservation(@PathVariable("reservationCode") String reservationCode) throws ReservationNotFoundException, ParseException {
+    public ResponseEntity getReservation(@PathVariable("reservationCode") String reservationCode) throws ReservationNotFoundException {
         ReservationDTO reservation = hotelService.findReservation(reservationCode);
         return ResponseEntity.ok().body(reservation.toString());
     }
@@ -44,7 +43,7 @@ public class HotelController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity createReservation(@RequestBody ReservationDTO reservation) throws ReservationValidationException, ParseException {
+    public ResponseEntity createReservation(@RequestBody ReservationDTO reservation) throws ReservationValidationException {
         ReservationDTO reservationCreated = hotelService.createReservation(reservation);
         URI uri = URI.create("http://localhost:8080/hotel/reservation/" + reservationCreated.getReservationCode());
         return ResponseEntity.created(uri).build();
@@ -54,7 +53,7 @@ public class HotelController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseEntity updateReservation(@RequestBody ReservationDTO reservation) throws ReservationValidationException, ParseException{
+    public ResponseEntity updateReservation(@RequestBody ReservationDTO reservation) throws ReservationValidationException {
         ReservationDTO reservationCreated = hotelService.updateReservation(reservation);
         return ResponseEntity.ok(reservationCreated.toString());
 
