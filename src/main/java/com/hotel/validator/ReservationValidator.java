@@ -53,9 +53,9 @@ public class ReservationValidator {
     //Currently using Cancun timezone considering the Hotel places there
     private Boolean validateDayOfReservation(LocalDate startDate) {
         Instant now = Instant.now();
-        ZonedDateTime montrealTime = now.atZone(ZoneId.of("America/Cancun"));
+        ZonedDateTime cancunTime = now.atZone(ZoneId.of("America/Cancun"));
 
-        return !startDate.isAfter(montrealTime.toLocalDate().plusDays(30));
+        return !startDate.isAfter(cancunTime.toLocalDate().plusDays(30));
 
     }
 

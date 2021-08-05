@@ -12,8 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelService {
@@ -33,6 +38,13 @@ public class HotelService {
         LocalDate endDate = HotelUtils.parseStringToLocalDate(reservation.getEndDate());
 
         reservationValidator.validateReservationDate(startDate, endDate);
+    }
+
+    public List<ReservationDTO> getRooms() {
+        Instant now = Instant.now();
+        ZonedDateTime cancunTime = now.atZone(ZoneId.of("America/Cancun"));
+        List<Reservation> reservationList = reservationRepository.listReservationsByToday(Timestamp.from(cancunTime.toInstant()));
+        return reservationList.stream().map(r -> reservationMapper.reservationToReservationDTO(r)).collect(Collectors.toList());
     }
 
     public ReservationDTO createReservation(ReservationDTO reservation) throws ReservationValidationException {

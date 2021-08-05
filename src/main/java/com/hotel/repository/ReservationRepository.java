@@ -22,4 +22,8 @@ public interface ReservationRepository extends CrudRepository<Reservation, Integ
 
     Optional<Reservation> findByReservationCode(@Param("reservationCode") String reservationCode);
 
+    @Query(value = "SELECT * from Reservation " +
+            "WHERE startDate >= :today OR (startDate <= :today AND endDate >= :today)", nativeQuery = true)
+    List<Reservation> listReservationsByToday(@Param("today") Timestamp today);
+
 }

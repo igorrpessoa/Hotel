@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/hotel")
@@ -25,6 +26,13 @@ public class HotelController {
     public ResponseEntity getRoomAvailability(@RequestBody ReservationDTO reservation) throws ReservationValidationException {
         hotelService.getRoomAvailability(reservation);
         return ResponseEntity.ok().body("The Room is available for the selected period");
+    }
+
+    @GetMapping(value = "/reservations",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity getReservations() throws ReservationValidationException {
+        List<ReservationDTO> reservationDTOS = hotelService.getRooms();
+        return ResponseEntity.ok().body(reservationDTOS.toString());
     }
 
     @GetMapping(value = "/reservation/{reservationCode}")
