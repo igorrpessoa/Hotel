@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -32,10 +33,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.unprocessableEntity().body(ex.getMessage());
     }
 
-    @ExceptionHandler(ParseException.class)
+    @ExceptionHandler(DateTimeParseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> handleParseException(ParseException ex, WebRequest request){
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Object> handleParseException(DateTimeParseException ex, WebRequest request){
+        return ResponseEntity.badRequest().body("Could not parse dates. Be sure to follow the yyyy-MM-dd pattern");
     }
 
 
