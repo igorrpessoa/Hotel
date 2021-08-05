@@ -13,6 +13,7 @@ The rules are:
 Contains the following options:
 - [CREATE](#create) - Create a reservation!
 - [CHECK](#check) - Consult a reservation through Reservation Code!
+- [LIST](#list) - List all reservations!
 - [CANCEL](#cancel) - Cancel a reservation!
 - [UPDATE](#update) - Update the period of your reservation!
 - [AVAILABILITY](#availability) - Check the availability of a period!
@@ -37,6 +38,11 @@ You will receive in the response a link with your reservation code.
 Check your reservation through a ```GET``` at the ```localhost:8080/hotel/reservation/{reservation_code}``` endpoint.
 
 You should set ```startDate``` and ```endDate``` in the body of your request, and the ```reservation_code``` in the endpoint .
+
+## LIST
+Check the room reservations through a ```GET``` at the ```localhost:8080/hotel/reservations``` endpoint.
+
+You will be able to see all the reservations and see if there is a date available for you.
 
 ## CANCEL
 Cancel your reservation using the Reservation Code. You should use ```DELETE```
