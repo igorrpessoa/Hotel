@@ -17,6 +17,9 @@ import java.util.List;
 @RequestMapping("/hotel")
 public class HotelController {
 
+//    final static Logger logger = Logger.getLogger(HotelController.class);
+
+
     @Autowired
     private HotelService hotelService;
 

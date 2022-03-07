@@ -3,13 +3,15 @@ package com.hotel.validator;
 import com.hotel.exception.ReservationValidationException;
 import com.hotel.model.Reservation;
 import com.hotel.repository.ReservationRepository;
+import com.hotel.service.HotelService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -19,14 +21,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
-class ReservationValidatorTest {
+class HotelServiceTest {
 
-    @InjectMocks
-    private ReservationValidator reservationValidator;
+    @Autowired
+    private HotelService hotelService;
 
-    @Mock
+    @MockBean
     private ReservationRepository reservationRepository;
 
     @Test
@@ -35,7 +36,7 @@ class ReservationValidatorTest {
         LocalDate endDate = LocalDate.now().plusDays(1);
 
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
-                reservationValidator.validateReservationDate(startDate, endDate));
+                hotelService.validateReservationDate(startDate, endDate));
 
         assertEquals("Start Date should be before then End Date", reservationValidationException.getMessage());
     }
@@ -46,7 +47,7 @@ class ReservationValidatorTest {
         LocalDate endDate = LocalDate.now().plusDays(2);
 
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
-                reservationValidator.validateReservationDate(startDate, endDate));
+                hotelService.validateReservationDate(startDate, endDate));
 
         assertEquals("Start Date should be after today", reservationValidationException.getMessage());
     }
@@ -58,7 +59,7 @@ class ReservationValidatorTest {
         LocalDate endDate = LocalDate.now().plusDays(32);
 
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
-                reservationValidator.validateReservationDate(startDate, endDate));
+                hotelService.validateReservationDate(startDate, endDate));
 
         assertEquals("You can only book a Room at max 30 days ahead", reservationValidationException.getMessage());
     }
@@ -69,7 +70,7 @@ class ReservationValidatorTest {
         LocalDate endDate =  LocalDate.now().plusDays(5);
 
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
-                reservationValidator.validateReservationDate(startDate, endDate));
+                hotelService.validateReservationDate(startDate, endDate));
 
         assertEquals("Not possible to book a Room for more than 3 days", reservationValidationException.getMessage());
     }
@@ -84,7 +85,7 @@ class ReservationValidatorTest {
         Mockito.when(reservationRepository.listReservedRooms(Timestamp.valueOf(startDate.atStartOfDay()),
                 Timestamp.valueOf(endDate.atStartOfDay()))).thenReturn(availableReservations);
         Exception reservationValidationException = assertThrows(ReservationValidationException.class, () ->
-                reservationValidator.validateReservationDate(startDate, endDate));
+                hotelService.validateReservationDate(startDate, endDate));
 
         assertEquals("The Room is not available for the requested period", reservationValidationException.getMessage());
     }
