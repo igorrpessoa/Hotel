@@ -106,7 +106,6 @@ public class HotelService {
     }
 
 
-
     /*    Validate the reservation regarding the rules of the HOTEL
      *
      * The Hotel contains only 1 room;
@@ -125,11 +124,11 @@ public class HotelService {
             throw new ReservationValidationException("Start Date should be after today");
         }
 
-        if(!validateDaysToBook(startDate, endDate)) {
+        if(validateDaysToBook(startDate, endDate)) {
             throw new ReservationValidationException("Not possible to book a Room for more than 3 days");
         }
 
-        if(!validateDayOfReservation(startDate)) {
+        if(validateDayOfReservation(startDate)) {
             throw new ReservationValidationException("You can only book a Room at max 30 days ahead");
         }
 
@@ -145,12 +144,12 @@ public class HotelService {
         Instant now = Instant.now();
         ZonedDateTime cancunTime = now.atZone(ZoneId.of("America/Cancun"));
 
-        return !startDate.isAfter(cancunTime.toLocalDate().plusDays(30));
+        return startDate.isAfter(cancunTime.toLocalDate().plusDays(30));
 
     }
 
     private Boolean validateDaysToBook(LocalDate d1, LocalDate d2) {
         long differenceDays = Duration.between(d1.atStartOfDay(), d2.atStartOfDay()).toDays();
-        return differenceDays < 3;
+        return differenceDays > 3;
     }
 }
